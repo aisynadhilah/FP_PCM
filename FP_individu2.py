@@ -29,9 +29,9 @@ if uploaded_file is not None:
     # Kolom 1 untuk Histogram Gambar Asli
     with col1:
         # Membuat histogram untuk gambar asli
-        hist_original, bin_edges = exposure.histogram(image)
+        hist_original, bin_edges_original = np.histogram(image.flatten(), bins=256, range=(0, 255))
         fig1, ax1 = plt.subplots(figsize=(5, 4))
-        ax1.plot(bin_edges[1:], hist_original, color='orange')
+        ax1.plot(bin_edges_original[1:], hist_original, color='orange')
         ax1.set_title("Histogram of Original Image")
         ax1.set_xlabel("Pixel Intensity")
         ax1.set_ylabel("Frequency")
@@ -40,9 +40,9 @@ if uploaded_file is not None:
     # Kolom 2 untuk Histogram AHE Image
     with col2:
         # Membuat histogram untuk gambar AHE
-        hist_ahe, bin_edges = exposure.histogram(image_adapteq)
+        hist_ahe, bin_edges_ahe = np.histogram(image_adapteq.flatten(), bins=256, range=(0, 255))
         fig2, ax2 = plt.subplots(figsize=(5, 4))
-        ax2.plot(bin_edges[1:], hist_ahe, color='blue')
+        ax2.plot(bin_edges_ahe[1:], hist_ahe, color='blue')
         ax2.set_title("Histogram of AHE Image")
         ax2.set_xlabel("Pixel Intensity")
         ax2.set_ylabel("Frequency")
@@ -74,7 +74,7 @@ if uploaded_file is not None:
     # Convert mask to int untuk operasi lebih lanjut
     mask = mask * 1  # dikali satu utk convert "true-false" to "1-0"
     im = np.where(mask, med_img, 0)
-    hist_im, bin_edges = exposure.histogram(im)
+    hist_im, bin_edges_im = np.histogram(im.flatten(), bins=256, range=(0, 255))
 
     col1, col2 = st.columns(2)
 
@@ -90,7 +90,7 @@ if uploaded_file is not None:
     # Histogram
     st.subheader("Histogram of Masked Image")
     fig, ax = plt.subplots()
-    ax.plot(bin_edges[1:], hist_im)
+    ax.plot(bin_edges_im[1:], hist_im)
     ax.set_title("Histogram of Masked Image")
     ax.set_xlabel("Pixel Intensity")
     ax.set_ylabel("Frequency")
